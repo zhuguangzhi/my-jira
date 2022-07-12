@@ -1,7 +1,8 @@
 export type UserProp = {
-    "id"?: number | string,
-    "name": string,
-    personId?: string
+    id?: number | string,
+    name: string,
+    personId?: string,
+    token?: string
 }
 export type ProjectProp = {
     id: number,
@@ -9,4 +10,9 @@ export type ProjectProp = {
     organization: string,
     personId: number,
     created: number
+}
+
+export interface loginInfoProps {
+    username: string,
+    password: string | number
 }
