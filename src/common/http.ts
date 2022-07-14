@@ -65,7 +65,7 @@ async function apiAxios(method: string, url: string, params: any, header?: any) 
 }
 
 export default {
-    get: (url: string, params: object, header?: any) => apiAxios('GET', url + "?" + qs.stringify(cleanObject(params)), {}, header),
+    get: (url: string, params: { [key: string]: unknown }, header?: any) => apiAxios('GET', url + "?" + qs.stringify(cleanObject(params)), {}, header),
     post: (url: string, params: object, header?: any) => apiAxios('POST', url, params, header),
     put: (url: string, params: object, header?: any) => apiAxios('PUT', url, params, header),
     delete: (url: string, params: object, header?: any) => apiAxios('DELETE', url, params, header),
