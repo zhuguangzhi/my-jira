@@ -1,11 +1,33 @@
 // 封装axios--------------------------------------------------------------------------------------
+
 import axios from "axios";
+import * as auth from 'auth-provider'
+import qs from "qs";
+import {cleanObject} from "../utils";
+import {message} from "antd";
+
+// 封装数据返回失败提示函数---------------------------------------------------------------------------
+function errorState({response}: any) {
+    console.log('response', response)
+    // 如果http状态码正常，则直接返回数据
+    if (response.status === 400) {
+        message.error(response.data.message)
+    } else {
+        auth.loginOut()
+    }
+}
+
 
 async function apiAxios(method: string, url: string, params: any, header?: any) {
     if (!header) {
         header = {}
     }
-
+    const token = auth.getToken()
+    header = {
+        ...header,
+        Authorization: token ? `Bearer ${token}` : '',
+        'Content-Type': header['Content-Type'] ? header['Content-Type'] : 'application/json'
+    }
     // const accountStore = account()
     // 从state中取出token
     // if(accountStore.token){
@@ -28,16 +50,25 @@ async function apiAxios(method: string, url: string, params: any, header?: any) 
     httpDefault.headers = {
         ...header
     }
-    return axios(httpDefault);
+    const result: Promise<any> = new Promise((resolve, reject) => {
+        axios(httpDefault).then(res => {
+            return resolve(res.data)
+        }).catch(response => {
+            errorState(response)
+            return reject(response)
+        })
+    })
+    return await result
+    // return axios(httpDefault)
     // if (!response.ok) return false;
     // return await response.json()
 }
 
 export default {
-    get: (url: string, params?: any, header?: any) => apiAxios('GET', url, params, header),
-    post: (url: string, params?: any, header?: any) => apiAxios('POST', url, params, header),
-    put: (url: string, params?: any, header?: any) => apiAxios('PUT', url, params, header),
-    delete: (url: string, params?: any, header?: any) => apiAxios('DELETE', url, params, header),
-    patch: (url: string, params?: any, header?: any) => apiAxios('PATCH', url, params, header)
+    get: (url: string, params: object, header?: any) => apiAxios('GET', url + "?" + qs.stringify(cleanObject(params)), {}, header),
+    post: (url: string, params: object, header?: any) => apiAxios('POST', url, params, header),
+    put: (url: string, params: object, header?: any) => apiAxios('PUT', url, params, header),
+    delete: (url: string, params: object, header?: any) => apiAxios('DELETE', url, params, header),
+    patch: (url: string, params: object, header?: any) => apiAxios('PATCH', url, params, header)
 
 }

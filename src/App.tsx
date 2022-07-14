@@ -1,11 +1,15 @@
 import React from 'react';
-import {LoginScreen} from "./screens/login";
+import {LoginComponent} from "./screens/login";
+import {useAuth} from "./hooks/context/auth-context";
+import {ProjectList} from "./screens/project-list";
 
 function App() {
+    const {user} = useAuth()
     return (
         <div className="App">
-            <LoginScreen></LoginScreen>
-            {/*<ProjectList/>*/}
+            {
+                user?.token ? <ProjectList/> : <LoginComponent></LoginComponent>
+            }
         </div>
     );
 }

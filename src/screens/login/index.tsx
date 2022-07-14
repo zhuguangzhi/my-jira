@@ -1,26 +1,65 @@
-import React, {FormEvent} from "react";
-import {LoginApi} from "../../common/api";
+import React, {useState} from "react";
+import {LoginScreen} from "./Login";
+import {RegisterScreen} from "./Register";
+import {Button, Card, Divider} from "antd";
+import styled from "@emotion/styled";
+import logo from 'assets/logo.svg'
+import left from 'assets/left.svg'
+import right from 'assets/right.svg'
 
-export const LoginScreen = () => {
-    const onLogin = async (username: string, password: string | number) => {
-        const res = await LoginApi.Login({username, password})
-        console.log('login result', res);
-    }
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        const username = (event.currentTarget[0] as HTMLFormElement).value
-        const password = (event.currentTarget[1] as HTMLFormElement).value
-        onLogin(username, password)
-    }
-    return <form onSubmit={handleSubmit}>
-        <div>
-            <label htmlFor="username">用户名</label>
-            <input type="text" id="username"/>
-        </div>
-        <div>
-            <label htmlFor="password">密码</label>
-            <input type="password" id="password" autoComplete={"pass"}/>
-        </div>
-        <button type="submit">登录</button>
-    </form>
+export const LoginComponent = () => {
+    const [isLogin, SetLogin] = useState(true)
+    return <Container>
+        <Header/>
+        <Background/>
+        <ShadowCard>
+            <Title>
+                My Jira
+            </Title>
+            {isLogin ? <LoginScreen/> : <RegisterScreen/>}
+            {/*分割线*/}
+            <Divider></Divider>
+            <a style={{userSelect: 'none'}} onClick={() => SetLogin(!isLogin)}>{isLogin ? "没有账号？注册一个吧" : "登录已有账号"}</a>
+        </ShadowCard>
+    </Container>
 }
+export const LongButton = styled(Button)`
+  width: 100%;
+`
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+`
+const Title = styled.h2`
+  margin-bottom: 24rem;
+  color: rgb(94, 108, 132);
+`
+//emotion/styled使用第三方的元素时需用（）
+const ShadowCard = styled(Card)`
+  width: 400rem;
+  min-height: 560rem;
+  padding: 32rem 40rem;
+  box-sizing: border-box;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 0 10px;
+  //margin-top: 80rem;
+  text-align: center;
+`
+const Header = styled.header`
+  background: url(${logo}) no-repeat center;
+  padding: 50rem 0;
+  background-size: 80rem;
+  width: 100%;
+`
+const Background = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  //background-attachment 图片是否随着滚动而滚动
+  background-attachment: fixed;
+  background-position: left bottom, right bottom;
+  background-size: calc(((100vw - 400rem) / 2) - 32rem), calc(((100vw - 400rem) / 2) - 32rem), cover;
+  background-image: url(${left}), url(${right});
+`

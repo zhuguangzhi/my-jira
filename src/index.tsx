@@ -3,17 +3,23 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {loadDevTools} from "jira-dev-tool";
+import {DevTools, loadServer} from "jira-dev-tool";
+//需覆盖 loadDevTools
+import 'antd/dist/antd.less'
+import {AppProvider} from "./hooks/context";
+
+import './App.css'
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
-loadDevTools(() => root.render(
-    // <AppProvider>
-    <React.StrictMode>
-        <App/>
-    </React.StrictMode>
-    // </AppProvider>
+loadServer(() => root.render(
+    <AppProvider>
+        <React.StrictMode>
+            <DevTools/>
+            <App/>
+        </React.StrictMode>
+    </AppProvider>
 ));
 
 

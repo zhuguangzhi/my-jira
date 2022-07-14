@@ -11,14 +11,12 @@ export const saveUserToken = ({user}: { user: UserProp }) => {
 //登录
 export const login = async (params: loginInfoProps) => {
     const res = await LoginApi.Login(params)
-    if (res.data.code !== 0) return Promise.reject(res.data.message)
-    return saveUserToken(res.data)
+    return saveUserToken(res)
 }
 //注册
 export const register = async (params: loginInfoProps) => {
     const res = await LoginApi.Register(params)
-    if (res.data.code !== 0) return Promise.reject(res.data.message)
-    return saveUserToken(res.data)
+    return saveUserToken(res)
 }
 //退出登录 清除token
 export const loginOut = async () => window.localStorage.removeItem(localStorageKey)

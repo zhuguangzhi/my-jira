@@ -1,5 +1,6 @@
 import React from "react";
 import {UserProp} from "../../types";
+import {Form, Input, Select} from "antd";
 
 type SearchPanelProps = {
     user: UserProp[],
@@ -10,22 +11,26 @@ type SearchPanelProps = {
     setParam: (param: SearchPanelProps["param"]) => void;
 }
 export const SearchPanel = ({param, setParam, user}: SearchPanelProps) => {
-
-    return <form>
-        <div>
-            <input type="text" value={param.name} onChange={evt => setParam({
+    // useMount(() => {
+    //     user.unshift({id: "", name: "负责人"})
+    // })
+    return <Form layout={"inline"}>
+        <Form.Item style={{marginBottom: "20rem"}}>
+            <Input type="text" placeholder={"输入名称"} value={param.name} onChange={evt => setParam({
                 ...param,
                 name: evt.target.value
             })}/>
-            <select value={param.personId} onChange={event => setParam({
+        </Form.Item>
+        <Form.Item>
+            <Select value={param.personId} onChange={value => setParam({
                 ...param,
-                personId: event.target.value
+                personId: value
             })}>
-                <option value={''}>负责人</option>
+                <Select.Option value={''}>负责人</Select.Option>
                 {
-                    user.map(item => <option value={item.id} key={item.id}>{item.name}</option>)
+                    user.map(item => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)
                 }
-            </select>
-        </div>
-    </form>
+            </Select>
+        </Form.Item>
+    </Form>
 }

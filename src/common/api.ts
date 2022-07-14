@@ -1,4 +1,5 @@
 import http from "./http";
+import {loginInfoProps, UserProp} from "../types";
 
 const apiUrl = process.env.REACT_APP_API_URL
 // const http = async (url: string, option: any = {}) => {
@@ -6,8 +7,10 @@ const apiUrl = process.env.REACT_APP_API_URL
 //     if (!response.ok) return false;
 //     return await response.json()
 // }
-export const GetUser = () => http.get(`${apiUrl}/users`)
+export const GetUser = (p: any) => http.get(`${apiUrl}/users`, p)
+export const GetProjects = (p: UserProp) => http.get(`${apiUrl}/projects`, p)
 export const LoginApi = {
-    Login: (p: { username: string, password: string | number }) => http.post(`${apiUrl}/login`, p, {"Content-Type": "application/json"}),
-    Register: (p: { username: string, password: string | number }) => http.post(`${apiUrl}/register`, p, {"Content-Type": "application/json"})
+    Login: (p: loginInfoProps) => http.post(`${apiUrl}/login`, p,),
+    Register: (p: loginInfoProps) => http.post(`${apiUrl}/register`, p),
+    checkToken: (p: { token: string }) => http.get(`${apiUrl}/me`, p)
 }

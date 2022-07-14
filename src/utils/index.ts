@@ -1,14 +1,11 @@
-export const isFalsy = (value: any) => value === 0 ? false : !value
+export const isFalsy = (value: unknown) => value === 0 ? false : !value
+export const isVoid = (val: unknown) => val == null || val === ''
 
-export const cleanObject = (object: object) => {
-    const result: object = {...object}
-    Object.keys(result).forEach((key: string) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
+export const cleanObject = (object: { [key: string]: unknown }) => {
+    const result = {...object}
+    Object.keys(result).forEach((key) => {
         const value = result[key]
-        if (isFalsy(value))
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        { // @ts-ignore
+        if (isVoid(value)) {
             delete result[key]
         }
     })
