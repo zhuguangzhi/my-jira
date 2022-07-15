@@ -14,5 +14,6 @@ export type ProjectProp = {
 
 export interface loginInfoProps {
     username: string,
-    password: string | number
+    password: string | number,
+    cPassword?: string | number,
 }

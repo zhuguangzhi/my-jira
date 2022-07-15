@@ -1,15 +1,14 @@
 import React from "react";
 import {ProjectProp, UserProp} from "../../types";
-import {Table} from "antd";
+import {Table, TableProps} from "antd";
 import {ColumnsType} from "antd/lib/table";
 import dayjs from "dayjs";
 
-type ListProps = {
-    list: ProjectProp[],
+interface ListProps extends TableProps<ProjectProp> {
     user: UserProp[]
 }
 
-export const List = ({list, user}: ListProps) => {
+export const List = ({user, ...props}: ListProps) => {
     const columns: ColumnsType<ProjectProp> = [
         {title: "名称", dataIndex: 'name', sorter: (a, b) => a.name.localeCompare(b.name)},
         {title: "部门", dataIndex: "organization"},
@@ -30,7 +29,7 @@ export const List = ({list, user}: ListProps) => {
         }
 
     ]
-    return <Table rowKey={record => record.id} pagination={false} columns={columns} dataSource={list}/>
+    return <Table rowKey={record => record.id} pagination={false} columns={columns} {...props}/>
     // return <table border={1}>
     //     <thead>
     //     <tr>

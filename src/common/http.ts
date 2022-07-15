@@ -10,10 +10,8 @@ import {message} from "antd";
 function errorState({response}: any) {
     console.log('response', response)
     // 如果http状态码正常，则直接返回数据
-    if (response.status === 400) {
+    if (response.status >= 400) {
         message.error(response.data.message)
-    } else {
-        auth.loginOut()
     }
 }
 

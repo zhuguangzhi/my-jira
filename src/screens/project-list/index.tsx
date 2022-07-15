@@ -8,6 +8,8 @@ import styled from "@emotion/styled";
 //ReactComponent将属性转换为React组件
 import {ReactComponent as SoftwareLogo} from "assets/software-logo.svg"
 import {Dropdown, Menu} from "antd";
+import {useAsync} from "../../hooks/use-async";
+import {ProjectProp} from "../../types";
 
 export const ProjectList = () => {
     const [param, setParam] = useState({
@@ -15,27 +17,15 @@ export const ProjectList = () => {
         personId: "",
     })
     const debounceParam = useDebounce(param, 500)
-    const [list, setList] = useState([])
-    const [userList, setUserList] = useState([
-        {
-            name: "",
-            id: "",
-        }
-    ])
+    // const [list, setList] = useState<[] | null | ProjectProp[]>([])
+    const [userList, setUserList] = useState([])
     const {loginOut, user} = useAuth()
     const MenuItem = [
         {key: "loginOut", label: "退出登录"}
     ]
+    const {run, isLoading, data: list} = useAsync<ProjectProp[]>()
     useEffect(() => {
-        const loadPost = async () => {
-            const response = await GetProjects(param)
-            setList(response)
-        }
-        loadPost()
-        // fetch(`${apiUrl}/projects?${qs.stringify(cleanObject(param))}`).then(async response => {
-        //     if (!response.ok) return false;
-        //     setList(await response.json())
-        // })
+        run(GetProjects(param))
     }, [debounceParam])
     useMount(() => {
         const loadPost = async () => {
@@ -43,10 +33,6 @@ export const ProjectList = () => {
             setUserList(response)
         }
         loadPost()
-        // fetch(`${apiUrl}/users`).then(async response => {
-        //     if (!response.ok) return false;
-        //     setUser(await response.json())
-        // })
     })
     return <div>
         <PageHeader>
@@ -62,7 +48,7 @@ export const ProjectList = () => {
         <Main>
             <h2>项目列表</h2>
             <SearchPanel param={param} setParam={setParam} user={userList}></SearchPanel>
-            <List list={list} user={userList}></List>
+            <List loading={isLoading} dataSource={list || []} user={userList}></List>
         </Main>
 
     </div>
