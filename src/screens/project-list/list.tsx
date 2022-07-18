@@ -3,6 +3,7 @@ import {ProjectProp, UserProp} from "../../types";
 import {Table, TableProps} from "antd";
 import {ColumnsType} from "antd/lib/table";
 import dayjs from "dayjs";
+import {Link} from "react-router-dom";
 
 interface ListProps extends TableProps<ProjectProp> {
     user: UserProp[]
@@ -10,7 +11,14 @@ interface ListProps extends TableProps<ProjectProp> {
 
 export const List = ({user, ...props}: ListProps) => {
     const columns: ColumnsType<ProjectProp> = [
-        {title: "名称", dataIndex: 'name', sorter: (a, b) => a.name.localeCompare(b.name)},
+        {
+            title: "名称",
+            dataIndex: 'name',
+            sorter: (a, b) => a.name.localeCompare(b.name),
+            render(cellValue, rows) {
+                return <Link to={`projects/${rows.id}`}>{cellValue}</Link>
+            }
+        },
         {title: "部门", dataIndex: "organization"},
         {
             title: "负责人",

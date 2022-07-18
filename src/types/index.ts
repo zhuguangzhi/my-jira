@@ -1,14 +1,14 @@
 export type UserProp = {
-    id?: number | string,
+    id: number,
     name: string,
-    personId?: string,
+    personId?: number,
     token?: string
 }
 export type ProjectProp = {
     id: number,
     name: string,
     organization: string,
-    personId: number,
+    personId: number | null,
     created: number
 }
 

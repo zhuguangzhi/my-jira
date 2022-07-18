@@ -1,13 +1,11 @@
 import React from "react";
-import {UserProp} from "../../types";
-import {Form, Input, Select} from "antd";
+import {ProjectProp, UserProp} from "../../types";
+import {Form, Input} from "antd";
+import {IdSelect} from "../../components/id-select";
 
 type SearchPanelProps = {
     user: UserProp[],
-    param: {
-        personId: string,
-        name: string
-    },
+    param: Pick<ProjectProp, 'name' | 'personId'>,
     setParam: (param: SearchPanelProps["param"]) => void;
 }
 export const SearchPanel = ({param, setParam, user}: SearchPanelProps) => {
@@ -22,15 +20,23 @@ export const SearchPanel = ({param, setParam, user}: SearchPanelProps) => {
             })}/>
         </Form.Item>
         <Form.Item>
-            <Select value={param.personId} onChange={value => setParam({
-                ...param,
-                personId: value
-            })}>
-                <Select.Option value={''}>负责人</Select.Option>
-                {
-                    user.map(item => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)
-                }
-            </Select>
+            <IdSelect value={param.personId} onChange={value => {
+                setParam({
+                    ...param,
+                    personId: value || null
+                })
+            }} option={user} defaultOptionName={'负责人'}/>
+            {/*<Select value={param.personId} onChange={value => {*/}
+            {/*    setParam({*/}
+            {/*        ...param,*/}
+            {/*        personId: value*/}
+            {/*    })*/}
+            {/*}}>*/}
+            {/*    <Select.Option value={''}>负责人</Select.Option>*/}
+            {/*    {*/}
+            {/*        user.map(item => <Select.Option value={String(item.id)} key={item.id}>{item.name}</Select.Option>)*/}
+            {/*    }*/}
+            {/*</Select>*/}
         </Form.Item>
     </Form>
 }

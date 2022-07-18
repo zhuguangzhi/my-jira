@@ -1,31 +1,36 @@
 import React, {useEffect, useState} from "react";
 import {SearchPanel} from "./search-panel";
 import {List} from "./list";
-import {useDebounce, useMount} from "../../hooks";
+import {useDebounce, useDocumentTitle, useMount} from "../../hooks";
 import {GetProjects, GetUser} from "../../common/api";
 import {useAuth} from "../../hooks/context/auth-context";
 import styled from "@emotion/styled";
 //ReactComponent将属性转换为React组件
 import {ReactComponent as SoftwareLogo} from "assets/software-logo.svg"
-import {Dropdown, Menu} from "antd";
+import {Button, Dropdown, Menu} from "antd";
 import {useAsync} from "../../hooks/use-async";
 import {ProjectProp} from "../../types";
+import {BrowserRouter as Router} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router";
+import {ProjectScreen} from "../Project";
+import {useUrlQueryParam} from "../../hooks/url";
 
-export const ProjectList = () => {
-    const [param, setParam] = useState({
-        name: "",
-        personId: "",
-    })
+const ProjectList = () => {
+    // const [param, setParam] = useState({
+    //     name: "",
+    //     personId: "",
+    // })
+    const [param, setParam] = useUrlQueryParam(['name', 'personId'])
+    const projectParam = {
+        ...param,
+        personId: Number(param.personId) || null
+    }
     const debounceParam = useDebounce(param, 500)
     // const [list, setList] = useState<[] | null | ProjectProp[]>([])
     const [userList, setUserList] = useState([])
-    const {loginOut, user} = useAuth()
-    const MenuItem = [
-        {key: "loginOut", label: "退出登录"}
-    ]
     const {run, isLoading, data: list} = useAsync<ProjectProp[]>()
     useEffect(() => {
-        run(GetProjects(param))
+        run(GetProjects(projectParam))
     }, [debounceParam])
     useMount(() => {
         const loadPost = async () => {
@@ -34,9 +39,25 @@ export const ProjectList = () => {
         }
         loadPost()
     })
+    useDocumentTitle('项目列表', false)
+    return <div>
+        <h2>项目列表</h2>
+        <SearchPanel param={projectParam} setParam={setParam}
+                     user={userList}></SearchPanel>
+        <List loading={isLoading} dataSource={list || []} user={userList}></List>
+    </div>
+}
+export const ProjectListScreen = () => {
+    const {loginOut, user} = useAuth()
+    const MenuItem = [
+        {key: "loginOut", label: "退出登录"}
+    ]
     return <div>
         <PageHeader>
-            <SoftwareLogo className={'logo'} width={"180rem"} color={"rgb(38,132,255)"}/>
+
+            <Button type={'link'} onClick={() => window.location.href = window.location.origin}>
+                <SoftwareLogo className={'logo'} width={"180rem"} color={"rgb(38,132,255)"}/>
+            </Button>
             <div className={'item'}>
                 <span>用户</span>
                 <span>项目</span>
@@ -46,13 +67,21 @@ export const ProjectList = () => {
             </Dropdown>
         </PageHeader>
         <Main>
-            <h2>项目列表</h2>
-            <SearchPanel param={param} setParam={setParam} user={userList}></SearchPanel>
-            <List loading={isLoading} dataSource={list || []} user={userList}></List>
+            <Router>
+                <Routes>
+                    <Route path={'/projects'} element={<ProjectList/>}/>
+                    <Route path={'/projects/:projectId/*'} element={<ProjectScreen/>}/>
+                    {/*默认路由 上面均无法匹配时使用该路由 不会改变路由地址*/}
+                    {/*<Route index element={<ProjectList/>}/>*/}
+                    {/*Navigate 路由重定向*/}
+                    <Route index element={<Navigate to={'/projects'}/>}/>
+                </Routes>
+            </Router>
         </Main>
 
     </div>
 }
+
 const PageHeader = styled.header`
   display: flex;
   align-items: center;
