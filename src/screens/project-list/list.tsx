@@ -1,16 +1,33 @@
 import React from "react";
 import {ProjectProp, UserProp} from "../../types";
-import {Table, TableProps} from "antd";
+import {Button, Dropdown, Menu, Table, TableProps} from "antd";
 import {ColumnsType} from "antd/lib/table";
 import dayjs from "dayjs";
 import {Link} from "react-router-dom";
+import {Pin} from "../../components/pin";
+import {Project} from "../../common/api";
 
 interface ListProps extends TableProps<ProjectProp> {
-    user: UserProp[]
+    user: UserProp[],
+    reFresh: () => () => void
 }
 
-export const List = ({user, ...props}: ListProps) => {
+export const List = ({user, reFresh, ...props}: ListProps) => {
+    const CollectProject = async (param: Partial<ProjectProp>) => {
+        const response = await Project.projectCollect(param)
+        reFresh()
+    }
+    const MenuItem = [
+        {key: "edit", label: "编辑"}
+    ]
     const columns: ColumnsType<ProjectProp> = [
+        {
+            title: <Pin checked={true} disabled={true}></Pin>,
+            dataIndex: 'pin',
+            render(value, rows) {
+                return <Pin checked={value} onCheckedChange={(pin) => CollectProject({id: rows.id, pin})}/>
+            }
+        },
         {
             title: "名称",
             dataIndex: 'name',
@@ -34,9 +51,18 @@ export const List = ({user, ...props}: ListProps) => {
                     {project.created ? dayjs(project.created).format('YYYY-MM-DD') : "无"}
                 </span>
             }
+        }, {
+            render(value, row) {
+                return <Dropdown overlay={
+                    <Menu items={MenuItem}/>
+                }>
+                    <Button type={"link"}>...</Button>
+                </Dropdown>
+            }
         }
 
     ]
+
     return <Table rowKey={record => record.id} pagination={false} columns={columns} {...props}/>
     // return <table border={1}>
     //     <thead>

@@ -16,6 +16,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
         ...defaultInitialState,
         ...initialState
     })
+    const [reTry, setReTry] = useState<() => () => void>()
     const setData = (data: D) => setState({
         data,
         stat: "success",
@@ -27,13 +28,17 @@ export const useAsync = <D>(initialState?: State<D>) => {
         data: null
     })
     //出发异步请求
-    const run = (call: Promise<D>) => {
-        if (!call) throw new Error('请传入异步回调')
+    const run = (promise: Promise<D>, runConfig?: () => Promise<D>) => {
+        if (!promise) throw new Error('请传入异步回调')
+        setReTry(() => () => {
+            if (runConfig)
+                run(runConfig(), runConfig)
+        })
         setState({
             ...state,
             stat: 'loading'
         })
-        return call.then(response => {
+        return promise.then(response => {
             setData(response)
             return response
         }).catch(error => {
@@ -47,6 +52,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
         isSuccess: state.stat === 'success',
         isError: state.stat === 'error',
         run,
+        reTry,
         setState,
         setError,
         setData,

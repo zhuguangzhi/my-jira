@@ -14,3 +14,6 @@ export const LoginApi = {
     Register: (p: loginInfoProps) => http.post(`${apiUrl}/register`, p),
     checkToken: (p: { token: string }) => http.get(`${apiUrl}/me`, p)
 }
+export const Project = {
+    projectCollect: (p: Partial<ProjectProp>) => http.patch(`${apiUrl}/projects/${p.id}`, p)
+}

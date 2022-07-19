@@ -7,6 +7,7 @@ export type UserProp = {
 export type ProjectProp = {
     id: number,
     name: string,
+    pin: boolean,
     organization: string,
     personId: number | null,
     created: number

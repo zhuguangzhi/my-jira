@@ -14,6 +14,7 @@ import {BrowserRouter as Router} from "react-router-dom";
 import {Navigate, Route, Routes} from "react-router";
 import {ProjectScreen} from "../Project";
 import {useUrlQueryParam} from "../../hooks/url";
+import {ProjectPopover} from "../../components/project-popover";
 
 const ProjectList = () => {
     // const [param, setParam] = useState({
@@ -28,9 +29,9 @@ const ProjectList = () => {
     const debounceParam = useDebounce(param, 500)
     // const [list, setList] = useState<[] | null | ProjectProp[]>([])
     const [userList, setUserList] = useState([])
-    const {run, isLoading, data: list} = useAsync<ProjectProp[]>()
+    const {run, isLoading, data: list, reTry} = useAsync<ProjectProp[]>()
     useEffect(() => {
-        run(GetProjects(projectParam))
+        run(GetProjects(projectParam), () => GetProjects(projectParam))
     }, [debounceParam])
     useMount(() => {
         const loadPost = async () => {
@@ -41,10 +42,14 @@ const ProjectList = () => {
     })
     useDocumentTitle('项目列表', false)
     return <div>
-        <h2>项目列表</h2>
+        <div style={{display: "flex", justifyContent: "space-between"}}>
+            <h2>项目列表</h2>
+            <MyButton>创建项目</MyButton>
+        </div>
         <SearchPanel param={projectParam} setParam={setParam}
                      user={userList}></SearchPanel>
-        <List loading={isLoading} dataSource={list || []} user={userList}></List>
+        <List reFresh={reTry as () => () => Promise<ProjectProp[]>} loading={isLoading} dataSource={list || []}
+              user={userList}></List>
     </div>
 }
 export const ProjectListScreen = () => {
@@ -55,12 +60,12 @@ export const ProjectListScreen = () => {
     return <div>
         <PageHeader>
 
-            <Button type={'link'} onClick={() => window.location.href = window.location.origin}>
+            <Button style={{padding: 0}} type={'link'} onClick={() => window.location.href = window.location.origin}>
                 <SoftwareLogo className={'logo'} width={"180rem"} color={"rgb(38,132,255)"}/>
             </Button>
             <div className={'item'}>
                 <span>用户</span>
-                <span>项目</span>
+                <ProjectPopover/>
             </div>
             <Dropdown overlay={<Menu onClick={loginOut} items={MenuItem}/>}>
                 <a onClick={e => e.preventDefault()}>Hi,{user?.name || 'user'}</a>
@@ -106,7 +111,6 @@ const PageHeader = styled.header`
     flex: 1;
 
     span {
-      display: inline-block;
       padding: 0 20rem;
       cursor: pointer;
     }
@@ -115,4 +119,13 @@ const PageHeader = styled.header`
 const Main = styled.main`
   height: calc(100vh - 60rem);
   padding: 32rem;
+`
+const MyButton = styled.button`
+  border: none;
+  background: none;
+
+  :hover {
+    cursor: pointer;
+    color: #0052CC;
+  }
 `
