@@ -58,7 +58,7 @@ export const useAsync = <D>(initialState?: State<D>) => {
             return response
         }).catch(error => {
             setError(error)
-            return []
+            return null
         })
     }, [])
     return {

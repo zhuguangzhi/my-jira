@@ -19,4 +19,7 @@ export const register = async (params: loginInfoProps) => {
     return saveUserToken(res)
 }
 //退出登录 清除token
-export const loginOut = async () => window.localStorage.removeItem(localStorageKey)
+export const loginOut = async () => {
+    window.localStorage.removeItem(localStorageKey)
+    window.location.href = window.location.origin
+}

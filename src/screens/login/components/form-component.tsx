@@ -29,11 +29,11 @@ export const FormComponent = ({title}: FormComponentProps) => {
             <Input placeholder={"用户名"} type="text"/>
         </Form.Item>
         <Form.Item name={'password'} rules={[{required: true, message: "请输入密码"}]}>
-            <Input placeholder={"密码"} type="password"/>
+            <Input placeholder={"密码"} type="password" autoComplete={"true"}/>
         </Form.Item>
         {
             title === "注册" ? <Form.Item name={'cPassword'} rules={[{required: true, message: "请确认密码"}]}>
-                <Input placeholder={"确认密码"} type="password"/>
+                <Input placeholder={"确认密码"} type="password" autoComplete={"true"}/>
             </Form.Item> : ""
         }
         <Form.Item>
