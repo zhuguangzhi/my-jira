@@ -5,20 +5,22 @@ import {ColumnsType} from "antd/lib/table";
 import dayjs from "dayjs";
 import {Link} from "react-router-dom";
 import {Pin} from "../../components/pin";
-import {Project} from "../../common/api";
 import {useControlPopoverModel} from "../../hooks";
+import {useEditProject} from "../../utils/project";
+import {useDispatch} from "react-redux";
+import {projectListActions} from "../../store/module/project-list.slice";
 
 interface ListProps extends TableProps<ProjectProp> {
     user: UserProp[],
-    reFresh: () => () => void
+    reFresh?: () => () => void
 }
 
 export const List = ({user, reFresh, ...props}: ListProps) => {
     const popoverModel = useControlPopoverModel('open')
-    const CollectProject = async (param: Partial<ProjectProp>) => {
-        const response = await Project.projectCollect(param)
-        reFresh()
-    }
+    const {mutate} = useEditProject()
+    const CollectProject = (param: Partial<ProjectProp>) => mutate(param)
+    const dispatch = useDispatch()
+
     const MenuItem = [
         {key: "edit", label: "编辑"}
     ]
@@ -56,7 +58,11 @@ export const List = ({user, reFresh, ...props}: ListProps) => {
         }, {
             render(value, row) {
                 return <Dropdown overlay={
-                    <Menu onClick={() => popoverModel()} items={MenuItem}/>
+                    <Menu onClick={() => {
+                        dispatch(projectListActions.setProjectList(row))
+                        dispatch(projectListActions.setType('edit'))
+                        popoverModel()
+                    }} items={MenuItem}/>
                 }>
                     <Button type={"link"}>...</Button>
                 </Dropdown>

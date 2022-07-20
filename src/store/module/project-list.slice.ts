@@ -4,14 +4,16 @@ import {RootState} from "../index";
 
 interface State {
     projectModalOpen: boolean;
-    projects: ProjectProp[];
+    projects: ProjectProp | null;
     user: UserProp | null;
+    type: "add" | "edit"
 }
 
 const initialState: State = {
     projectModalOpen: false,
-    projects: [],
-    user: null
+    projects: null,
+    user: null,
+    type: "add"
 }
 export const ProjectListSlice = createSlice({
     name: "projectListSlice",
@@ -23,11 +25,14 @@ export const ProjectListSlice = createSlice({
         closeProjectModel(state) {
             state.projectModalOpen = false
         },
-        setProjectList(state, action: PayloadAction<ProjectProp[]>) {
+        setProjectList(state, action: PayloadAction<ProjectProp | null>) {
             state.projects = action.payload
         },
         setUser(state, action: PayloadAction<UserProp>) {
             state.user = action.payload
+        },
+        setType(state, action: PayloadAction<'add' | 'edit' | null>) {
+            state.type = action.payload || 'add'
         }
     }
 })

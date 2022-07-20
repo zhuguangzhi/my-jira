@@ -1,14 +1,13 @@
 import React from "react";
-import {ProjectProp, UserProp} from "../../types";
+import {ProjectProp} from "../../types";
 import {Form, Input} from "antd";
-import {IdSelect} from "../../components/id-select";
+import {UserSelect} from "../../components/user-select";
 
 type SearchPanelProps = {
-    user: UserProp[],
     param: Pick<ProjectProp, 'name' | 'personId'>,
     setParam: (param: SearchPanelProps["param"]) => void;
 }
-export const SearchPanel = ({param, setParam, user}: SearchPanelProps) => {
+export const SearchPanel = ({param, setParam}: SearchPanelProps) => {
     // useMount(() => {
     //     user.unshift({id: "", name: "负责人"})
     // })
@@ -20,12 +19,16 @@ export const SearchPanel = ({param, setParam, user}: SearchPanelProps) => {
             })}/>
         </Form.Item>
         <Form.Item>
-            <IdSelect value={param.personId} onChange={value => {
-                setParam({
-                    ...param,
-                    personId: value || null
-                })
-            }} option={user} defaultOptionName={'负责人'}/>
+            <UserSelect
+                defaultOptionName={"负责人"}
+                value={param.personId}
+                onChange={(value) =>
+                    setParam({
+                        ...param,
+                        personId: value || null,
+                    })
+                }
+            />
             {/*<Select value={param.personId} onChange={value => {*/}
             {/*    setParam({*/}
             {/*        ...param,*/}

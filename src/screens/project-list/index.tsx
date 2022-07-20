@@ -1,47 +1,32 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {SearchPanel} from "./search-panel";
 import {List} from "./list";
-import {useControlPopoverModel, useDebounce, useDocumentTitle, useMount} from "../../hooks";
-import {GetProjects, GetUser} from "../../common/api";
+// import {useQuery} from "react-query";
+import {useControlPopoverModel, useDebounce, useDocumentTitle} from "../../hooks";
 import {useAuth} from "../../hooks/context/auth-context";
 import styled from "@emotion/styled";
 //ReactComponent将属性转换为React组件
 import {ReactComponent as SoftwareLogo} from "assets/software-logo.svg"
 import {Button, Dropdown, Menu} from "antd";
-import {useAsync} from "../../hooks/use-async";
-import {ProjectProp} from "../../types";
 import {BrowserRouter as Router} from "react-router-dom";
 import {Navigate, Route, Routes} from "react-router";
 import {ProjectScreen} from "../Project";
 import {useUrlQueryParam} from "../../hooks/url";
 import {ProjectPopover} from "../../components/project-popover";
 import {ProjectModal} from "./project-model";
+import {useProject} from "../../utils/project";
+import {useUser} from "../../utils/user";
 
 const ProjectList = () => {
-    // const [param, setParam] = useState({
-    //     name: "",
-    //     personId: "",
-    // })
     const popoverModel = useControlPopoverModel('open')
     const [param, setParam] = useUrlQueryParam(['name', 'personId'])
     const projectParam = {
         ...param,
         personId: Number(param.personId) || null
     }
-    const debounceParam = useDebounce(param, 500)
-    // const [list, setList] = useState<[] | null | ProjectProp[]>([])
-    const [userList, setUserList] = useState([])
-    const {run, isLoading, data: list, reTry} = useAsync<ProjectProp[]>()
-    useEffect(() => {
-        run(GetProjects(projectParam), () => GetProjects(projectParam))
-    }, [debounceParam])
-    useMount(() => {
-        const loadPost = async () => {
-            const response = await GetUser({})
-            setUserList(response)
-        }
-        loadPost()
-    })
+    // const [userList, setUserList] = useState([])
+    const {isLoading, error, data: list} = useProject(useDebounce(projectParam, 500));
+    const {data: userList} = useUser()
     useDocumentTitle('项目列表', false)
     return <div>
         <div style={{display: "flex", justifyContent: "space-between"}}>
@@ -51,10 +36,9 @@ const ProjectList = () => {
             }
             }>创建项目</MyButton>
         </div>
-        <SearchPanel param={projectParam} setParam={setParam}
-                     user={userList}></SearchPanel>
-        <List reFresh={reTry as () => () => Promise<ProjectProp[]>} loading={isLoading} dataSource={list || []}
-              user={userList}></List>
+        <SearchPanel param={projectParam} setParam={setParam}/>
+        <List loading={isLoading} dataSource={list || []}
+              user={userList || []}></List>
     </div>
 }
 export const ProjectListScreen = () => {

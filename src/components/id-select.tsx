@@ -1,13 +1,14 @@
 import React from "react";
 import {Select} from "antd";
+import {UserProp} from "../types";
 
 type SelectProps = React.ComponentProps<typeof Select>
 
 interface IdSelectProps extends Omit<SelectProps, 'value' | 'onChange' | 'option'> {
-    value: string | number | null | undefined
+    value?: string | number | null | undefined
     onChange?: (id: number | undefined) => void
     defaultOptionName?: string,
-    option?: { id: number, name: string }[]
+    option?: Partial<UserProp>[]
 }
 
 /*

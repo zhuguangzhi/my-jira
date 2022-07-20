@@ -15,5 +15,8 @@ export const LoginApi = {
     checkToken: (p: { token: string }) => http.get(`${apiUrl}/me`, p)
 }
 export const Project = {
-    projectCollect: (p: Partial<ProjectProp>) => http.patch(`${apiUrl}/projects/${p.id}`, p)
+    editProject: (p: Partial<ProjectProp>) => http.patch(`${apiUrl}/projects/${p.id}`, p),
+    GetProjectId: (id?: number) => http.get(`${apiUrl}/projects/${id}`, {}),
+    AddProjectId: (p: Partial<ProjectProp>) => http.post(`${apiUrl}/projects`, p),
+    DeleteProjectId: (p: Partial<ProjectProp>) => http.delete(`${apiUrl}/projects/${p.id}`, p),
 }
