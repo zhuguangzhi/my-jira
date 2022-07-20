@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {SearchPanel} from "./search-panel";
 import {List} from "./list";
-import {useDebounce, useDocumentTitle, useMount} from "../../hooks";
+import {useControlPopoverModel, useDebounce, useDocumentTitle, useMount} from "../../hooks";
 import {GetProjects, GetUser} from "../../common/api";
 import {useAuth} from "../../hooks/context/auth-context";
 import styled from "@emotion/styled";
@@ -15,12 +15,14 @@ import {Navigate, Route, Routes} from "react-router";
 import {ProjectScreen} from "../Project";
 import {useUrlQueryParam} from "../../hooks/url";
 import {ProjectPopover} from "../../components/project-popover";
+import {ProjectModal} from "./project-model";
 
 const ProjectList = () => {
     // const [param, setParam] = useState({
     //     name: "",
     //     personId: "",
     // })
+    const popoverModel = useControlPopoverModel('open')
     const [param, setParam] = useUrlQueryParam(['name', 'personId'])
     const projectParam = {
         ...param,
@@ -44,7 +46,10 @@ const ProjectList = () => {
     return <div>
         <div style={{display: "flex", justifyContent: "space-between"}}>
             <h2>项目列表</h2>
-            <MyButton>创建项目</MyButton>
+            <MyButton onClick={() => {
+                popoverModel()
+            }
+            }>创建项目</MyButton>
         </div>
         <SearchPanel param={projectParam} setParam={setParam}
                      user={userList}></SearchPanel>
@@ -83,6 +88,7 @@ export const ProjectListScreen = () => {
                 </Routes>
             </Router>
         </Main>
+        <ProjectModal/>
 
     </div>
 }

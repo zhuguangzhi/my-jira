@@ -3,8 +3,11 @@ import React, {useState} from "react";
 import {ProjectProp} from "../types";
 import {Button, Divider, List, Popover, Typography} from "antd";
 import {GetProjects} from "../common/api";
+import {useDispatch} from "react-redux";
+import {projectListActions} from "../store/module/project-list.slice";
 
 export const ProjectPopover = () => {
+    const dispatch = useDispatch()
     //获取项目收藏列表
     const [pinnedProjects, setPinnedProjects] = useState<ProjectProp[]>([])
     const refetch = (e: boolean) => {
@@ -24,7 +27,9 @@ export const ProjectPopover = () => {
                 ))}
         </MaxHeightList>
         <Divider style={{padding: 0, margin: ` 5px 0`}}/>
-        <Button style={{padding: 0}} type={"link"}>
+        <Button onClick={() => {
+            dispatch(projectListActions.openProjectModel())
+        }} style={{padding: 0}} type={"link"}>
             创建项目
         </Button>
     </ContentContainer>

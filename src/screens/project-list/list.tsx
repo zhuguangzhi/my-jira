@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import {Link} from "react-router-dom";
 import {Pin} from "../../components/pin";
 import {Project} from "../../common/api";
+import {useControlPopoverModel} from "../../hooks";
 
 interface ListProps extends TableProps<ProjectProp> {
     user: UserProp[],
@@ -13,6 +14,7 @@ interface ListProps extends TableProps<ProjectProp> {
 }
 
 export const List = ({user, reFresh, ...props}: ListProps) => {
+    const popoverModel = useControlPopoverModel('open')
     const CollectProject = async (param: Partial<ProjectProp>) => {
         const response = await Project.projectCollect(param)
         reFresh()
@@ -54,7 +56,7 @@ export const List = ({user, reFresh, ...props}: ListProps) => {
         }, {
             render(value, row) {
                 return <Dropdown overlay={
-                    <Menu items={MenuItem}/>
+                    <Menu onClick={() => popoverModel()} items={MenuItem}/>
                 }>
                     <Button type={"link"}>...</Button>
                 </Dropdown>

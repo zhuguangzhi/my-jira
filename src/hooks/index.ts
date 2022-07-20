@@ -1,4 +1,7 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {useDispatch} from "react-redux";
+import {projectListActions} from "../store/module/project-list.slice";
+import {AnyAction} from "@reduxjs/toolkit";
 
 //页面挂载时执行
 export const useMount = (call: () => void) => {
@@ -36,4 +39,12 @@ export const useDocumentTitle = (title: string, keepDocument = true) => {
             document.title = oldTitle
         }
     }, [])
+}
+//打开或关闭model
+export const useControlPopoverModel = (type: "open" | "close") => {
+    const disPatch = useDispatch()
+    let payload: () => AnyAction;
+    if (type === 'open') payload = projectListActions.openProjectModel
+    else payload = projectListActions.closeProjectModel
+    return useCallback(() => disPatch(payload()), [disPatch, payload])
 }
