@@ -1,19 +1,2 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg"
-     xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
-    <!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch -->
-    <title>task</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
-        <g id="task" sketch:type="MSArtboardGroup">
-            <g id="Task" sketch:type="MSLayerGroup" transform="translate(1.000000, 1.000000)">
-                <rect id="Rectangle-36" fill="#4BADE8" sketch:type="MSShapeGroup" x="0" y="0" width="14" height="14" rx="2"></rect>
-                <g id="Page-1" transform="translate(4.000000, 4.500000)" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" sketch:type="MSShapeGroup">
-                    <path d="M2,5 L6,0" id="Stroke-1"></path>
-                    <path d="M2,5 L0,3" id="Stroke-3"></path>
-                </g>
-            </g>
-        </g>
-    </g>
-</svg>
+<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg t="1658402809579" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="901" width="64" height="64" xmlns:xlink="http://www.w3.org/1999/xlink"><defs><style type="text/css">@font-face { font-family: feedback-iconfont; src: url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff2?t=1630033759944") format("woff2"), url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.woff?t=1630033759944") format("woff"), url("//at.alicdn.com/t/font_1031158_u69w8yhxdu.ttf?t=1630033759944") format("truetype"); }
+</style></defs><path d="M959.9 971.9H64.1c-6.6 0-12-5.4-12-12V64.1c0-6.6 5.4-12 12-12H960c6.6 0 12 5.4 12 12V960c-0.1 6.6-5.4 11.9-12.1 11.9z" fill="#4BADE8" p-id="902"></path><path d="M867.8 1024H156.2C70.1 1024 0 953.9 0 867.8V156.2C0 70.1 70.1 0 156.2 0h711.6C953.9 0 1024 70.1 1024 156.2v711.6c0 86.1-70.1 156.2-156.2 156.2zM156.2 104.1c-28.7 0-52.1 23.4-52.1 52.1v711.6c0 28.7 23.4 52.1 52.1 52.1h711.6c28.7 0 52.1-23.4 52.1-52.1V156.2c0-28.7-23.4-52.1-52.1-52.1H156.2z" fill="#4BADE8" p-id="903"></path><path d="M420.2 805.6c-10.7 0-21.5-3.3-30.7-10L138.3 612c-23.2-17-28.3-49.5-11.3-72.8 17-23.2 49.6-28.3 72.8-11.3L413 683.7l403.3-448.1c19.2-21.4 52.2-23.1 73.5-3.9s23.1 52.2 3.9 73.5L459 788.2c-10.3 11.5-24.5 17.4-38.8 17.4z" fill="#ffffff" p-id="904"></path></svg>

@@ -11,7 +11,7 @@ import {Button, Dropdown, Menu} from "antd";
 import {BrowserRouter as Router} from "react-router-dom";
 import {Navigate, Route, Routes} from "react-router";
 import {ProjectScreen} from "../Project";
-import {useUrlQueryParam} from "../../hooks/url";
+import {useSearchQueryParam} from "../../hooks/url";
 import {ProjectPopover} from "../../components/project-popover";
 import {ProjectModal} from "./project-model";
 import {useProject} from "../../utils/project";
@@ -19,7 +19,7 @@ import {useUser} from "../../utils/user";
 
 const ProjectList = () => {
     const popoverModel = useControlPopoverModel('open')
-    const [param, setParam] = useUrlQueryParam(['name', 'personId'])
+    const [param, setParam] = useSearchQueryParam()
     const projectParam = {
         ...param,
         personId: Number(param.personId) || null
@@ -47,21 +47,22 @@ export const ProjectListScreen = () => {
         {key: "loginOut", label: "退出登录"}
     ]
     return <div>
-        <PageHeader>
+        <Router>
+            <PageHeader>
 
-            <Button style={{padding: 0}} type={'link'} onClick={() => window.location.href = window.location.origin}>
-                <SoftwareLogo className={'logo'} width={"180rem"} color={"rgb(38,132,255)"}/>
-            </Button>
-            <div className={'item'}>
-                <span>用户</span>
-                <ProjectPopover/>
-            </div>
-            <Dropdown overlay={<Menu onClick={loginOut} items={MenuItem}/>}>
-                <a onClick={e => e.preventDefault()}>Hi,{user?.name || 'user'}</a>
-            </Dropdown>
-        </PageHeader>
-        <Main>
-            <Router>
+                <Button style={{padding: 0}} type={'link'}
+                        onClick={() => window.location.href = window.location.origin}>
+                    <SoftwareLogo className={'logo'} width={"180rem"} color={"rgb(38,132,255)"}/>
+                </Button>
+                <div className={'item'}>
+                    <span>用户</span>
+                    <ProjectPopover/>
+                </div>
+                <Dropdown overlay={<Menu onClick={loginOut} items={MenuItem}/>}>
+                    <a onClick={e => e.preventDefault()}>Hi,{user?.name || 'user'}</a>
+                </Dropdown>
+            </PageHeader>
+            <Main>
                 <Routes>
                     <Route path={'/projects'} element={<ProjectList/>}/>
                     <Route path={'/projects/:projectId/*'} element={<ProjectScreen/>}/>
@@ -70,10 +71,9 @@ export const ProjectListScreen = () => {
                     {/*Navigate 路由重定向*/}
                     <Route index element={<Navigate to={'/projects'}/>}/>
                 </Routes>
-            </Router>
-        </Main>
-        <ProjectModal/>
-
+            </Main>
+            <ProjectModal/>
+        </Router>
     </div>
 }
 
@@ -117,5 +117,4 @@ const MyButton = styled.button`
   :hover {
     cursor: pointer;
     color: #0052CC;
-  }
-`
+  }`

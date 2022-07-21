@@ -23,3 +23,25 @@ export const useUrlQueryParam = <T extends string>(keys: T[]) => {
         }
     ] as const
 }
+export const useSearchQueryParam = () => {
+    const [param, setParam] = useUrlQueryParam(["name", "personId"]);
+    return [
+        useMemo(
+            () => ({...param, personId: Number(param.personId) || undefined}),
+            [param]
+        ),
+        setParam,
+    ] as const;
+}
+export const useSetUrlSearchParam = () => {
+    //useSearchParams 获取路由参数的hook
+    const [searchParams, setSearchParam] = useSearchParams();
+    return (params: { [key in string]: unknown }) => {
+        const o = cleanObject({
+            //数组转对象
+            ...Object.fromEntries(searchParams),
+            ...params,
+        }) as URLSearchParamsInit;
+        return setSearchParam(o);
+    };
+};

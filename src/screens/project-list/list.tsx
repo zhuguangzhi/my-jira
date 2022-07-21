@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import {Link} from "react-router-dom";
 import {Pin} from "../../components/pin";
 import {useControlPopoverModel} from "../../hooks";
-import {useEditProject} from "../../utils/project";
+import {useDeleteProject, useEditProject} from "../../utils/project";
 import {useDispatch} from "react-redux";
 import {projectListActions} from "../../store/module/project-list.slice";
 
@@ -18,11 +18,25 @@ interface ListProps extends TableProps<ProjectProp> {
 export const List = ({user, reFresh, ...props}: ListProps) => {
     const popoverModel = useControlPopoverModel('open')
     const {mutate} = useEditProject()
+    const {mutate: delMutate} = useDeleteProject()
     const CollectProject = (param: Partial<ProjectProp>) => mutate(param)
     const dispatch = useDispatch()
 
+    const onMenuMethod = (e: string, row: ProjectProp) => {
+        if (e === 'edit') {
+            dispatch(projectListActions.setProjectList(row))
+            dispatch(projectListActions.setType('edit'))
+            popoverModel()
+            return false
+        }
+        //    删除
+        delMutate(row)
+
+    }
+
     const MenuItem = [
-        {key: "edit", label: "编辑"}
+        {key: "edit", label: "编辑"},
+        {key: "del", label: "删除"},
     ]
     const columns: ColumnsType<ProjectProp> = [
         {
@@ -37,7 +51,7 @@ export const List = ({user, reFresh, ...props}: ListProps) => {
             dataIndex: 'name',
             sorter: (a, b) => a.name.localeCompare(b.name),
             render(cellValue, rows) {
-                return <Link to={`projects/${rows.id}`}>{cellValue}</Link>
+                return <Link to={`/projects/${rows.id}/kanban`}>{cellValue}</Link>
             }
         },
         {title: "部门", dataIndex: "organization"},
@@ -58,11 +72,7 @@ export const List = ({user, reFresh, ...props}: ListProps) => {
         }, {
             render(value, row) {
                 return <Dropdown overlay={
-                    <Menu onClick={() => {
-                        dispatch(projectListActions.setProjectList(row))
-                        dispatch(projectListActions.setType('edit'))
-                        popoverModel()
-                    }} items={MenuItem}/>
+                    <Menu onClick={(e) => onMenuMethod(e.key, row)} items={MenuItem}/>
                 }>
                     <Button type={"link"}>...</Button>
                 </Dropdown>

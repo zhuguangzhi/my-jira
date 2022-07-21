@@ -14,14 +14,13 @@ export const ProjectModal = () => {
     const projectType: 'add' | 'edit' = useSelector((state: RootState) => state.projectList.type)
     const mutateAsync = projectType === 'add' ? useAddProject : useEditProject
     const {mutate, isLoading: mutateLoading} = mutateAsync()
-    const popoverModel = useControlPopoverModel('close')
     //useSelector 获取根状态树的状态
     const modalOpen = useSelector(projectModalOpen)
-    console.log('modalOpen', modalOpen)
-
     const dispatch = useDispatch()
     const title = projectInfo != null ? "编辑项目" : "创建项目";
     const [form] = Form.useForm()
+    const popoverModel = useControlPopoverModel('close')
+
 
     const closeModal = () => {
         form.resetFields();
