@@ -16,6 +16,7 @@ import {ProjectPopover} from "../../components/project-popover";
 import {ProjectModal} from "./project-model";
 import {useProject} from "../../utils/project";
 import {useUser} from "../../utils/user";
+import {UserPopover} from "../../components/user-popover";
 
 const ProjectList = () => {
     const popoverModel = useControlPopoverModel('open')
@@ -55,8 +56,8 @@ export const ProjectListScreen = () => {
                     <SoftwareLogo className={'logo'} width={"180rem"} color={"rgb(38,132,255)"}/>
                 </Button>
                 <div className={'item'}>
-                    <span>用户</span>
                     <ProjectPopover/>
+                    <UserPopover/>
                 </div>
                 <Dropdown overlay={<Menu onClick={loginOut} items={MenuItem}/>}>
                     <a onClick={e => e.preventDefault()}>Hi,{user?.name || 'user'}</a>
@@ -76,7 +77,7 @@ export const ProjectListScreen = () => {
         </Router>
     </div>
 }
-
+export default ProjectListScreen
 const PageHeader = styled.header`
   display: flex;
   align-items: center;

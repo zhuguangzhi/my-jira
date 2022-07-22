@@ -2,6 +2,7 @@ import http from "./http";
 import {loginInfoProps, ProjectProp} from "../types";
 import {Kanban, KanBanSortProps} from "../types/kanban";
 import {Task as TaskProps} from "../types/task";
+import {Epic} from "../types/epic";
 
 const apiUrl = process.env.REACT_APP_API_URL
 // const http = async (url: string, option: any = {}) => {
@@ -37,4 +38,9 @@ export const Task = {
     ReorderTask: (p: Partial<KanBanSortProps>) => http.post(`${apiUrl}/tasks/reorder`, p),
     GetTaskType: () => http.get(`${apiUrl}/taskTypes`, {})
 
+}
+export const EpicApi = {
+    GetEpic: (p?: Partial<Epic>) => http.get(`${apiUrl}/epics`, p || {}),
+    AddEpic: (p: Partial<Epic>) => http.post(`${apiUrl}/epics`, p),
+    DeleteEpic: (p: Partial<Epic>) => http.delete(`${apiUrl}/epics/${p.id}`, p),
 }

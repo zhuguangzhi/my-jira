@@ -1,13 +1,13 @@
 import React, {useState} from "react";
-import {LoginScreen} from "./Login";
 import {RegisterScreen} from "./Register";
 import {Button, Card, Divider} from "antd";
 import styled from "@emotion/styled";
 import logo from 'assets/logo.svg'
 import left from 'assets/left.svg'
 import right from 'assets/right.svg'
+import {LoginScreen} from "./Login";
 
-export const LoginComponent = () => {
+const LoginComponent = () => {
     const [isLogin, SetLogin] = useState(true)
     return <Container>
         <Header/>
@@ -23,6 +23,7 @@ export const LoginComponent = () => {
         </ShadowCard>
     </Container>
 }
+export default LoginComponent
 export const LongButton = styled(Button)`
   width: 100%;
 `

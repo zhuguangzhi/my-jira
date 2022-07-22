@@ -57,6 +57,6 @@ const Main = styled.div`
 
 const Container = styled.div`
   display: flex;
-  width: 100vw;
+  width: 100%;
   height: 100%;
 `;

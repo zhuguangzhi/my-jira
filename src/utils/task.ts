@@ -3,6 +3,7 @@ import {Task, TaskType} from "../types/task";
 import {KanBanSortProps} from "../types/kanban";
 import {Task as TaskApi} from 'common/api'
 import {ProjectProp} from "../types";
+import {reorder} from "./record";
 
 const queryKey = ['tasks']
 export const useTasks = (param?: Partial<Task>) => {
@@ -80,9 +81,13 @@ export const useReorderTask = () => {
             onSuccess: () => queryClient.invalidateQueries(queryKey),
             onMutate(target) {
                 let previousItems
-                queryClient.setQueriesData(queryKey, (res?: KanBanSortProps) => {
+                queryClient.setQueriesData(queryKey, (res?: Task[]) => {
                     previousItems = res
-                    return target || []
+                    const orderList = reorder<Task>({list: res, ...target}) as Task[]
+                    return orderList.map(item => item.id === target.fromId ? {
+                        ...item,
+                        kanbanId: target.toKanbanId
+                    } : item)
                 })
                 return {previousItems}
             },

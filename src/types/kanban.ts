@@ -7,9 +7,9 @@ export interface Kanban {
 
 export interface KanBanSortProps {
     // 要重新排序的 item
-    fromId: number;
+    fromId?: number;
     // 目标 item
-    referenceId: number;
+    referenceId?: number;
     // 放在目标item的前还是后
     type: "before" | "after";
     fromKanbanId?: number;

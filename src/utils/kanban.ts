@@ -1,6 +1,7 @@
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {Kanban, KanBanSortProps} from "types/kanban";
 import {KanBan} from "../common/api";
+import {reorder} from "./record";
 
 const queryKey = ['kanbans']
 
@@ -51,11 +52,11 @@ export const useReorderKanban = () => {
             onSuccess: () => queryClient.invalidateQueries(queryKey),
             onMutate(target) {
                 let previousItems
-                queryClient.setQueriesData(queryKey, (res?: KanBanSortProps) => {
+                queryClient.setQueriesData(queryKey, (res?: Kanban[]) => {
                     previousItems = res
-                    return target || []
+                    return reorder<Kanban>({...target, list: res}) as Kanban[]
                 })
-                return previousItems
+                return {previousItems}
             },
             onError(error, newItenms, context: any) {
                 queryClient.setQueriesData(queryKey, context.previousItems)
