@@ -8,7 +8,7 @@ import styled from "@emotion/styled";
 //ReactComponent将属性转换为React组件
 import {ReactComponent as SoftwareLogo} from "assets/software-logo.svg"
 import {Button, Dropdown, Menu} from "antd";
-import {BrowserRouter as Router} from "react-router-dom";
+import {HashRouter as Router} from "react-router-dom";
 import {Navigate, Route, Routes} from "react-router";
 import {ProjectScreen} from "../Project";
 import {useSearchQueryParam} from "../../hooks/url";
